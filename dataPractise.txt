@@ -1,0 +1,37 @@
+1. What is A* Search Algorithm? 
+A* Search algorithm is one of the best and popular technique used in path-finding and graph traversals.
+
+2. Why A* Search Algorithm? 
+Informally speaking, A* Search algorithms, unlike other traversal techniques, it has “brains”. What it means is that it is really a smart algorithm which separates it from the other conventional algorithms. This fact is cleared in detail in below sections. 
+And it is also worth mentioning that many games and web-based maps use this algorithm to find the shortest path very efficiently (approximation).
+
+3. We can calculate g but how to calculate h ?
+We can do things. 
+A ) Either calculate the exact value of h (which is certainly time consuming). 
+             OR 
+B ) Approximate the value of h using some heuristics (less time consuming).
+
+  (B)
+    i.  Manhattan Distance –  When we are allowed to move only in four directions only (right, left, top, bottom)
+        h = abs (current_cell.x – goal.x) + abs (current_cell.y – goal.y)
+
+    ii. Diagonal Distance - When we are allowed to move in eight directions only (similar to a move of a King in Chess)
+        dx = abs(current_cell.x – goal.x)
+        dy = abs(current_cell.y – goal.y)
+ 
+        h = D * (dx + dy) + (D2 - 2 * D) * min(dx, dy)
+
+        where D is length of each node(usually = 1) and D2 is diagonal distance between each node (usually = sqrt(2) ).
+
+    iii. Euclidean Distance - When we are allowed to move in any directions.
+        h = sqrt ( (current_cell.x – goal.x)2 + (current_cell.y – goal.y)2 )
+
+
+4. Relation (Similarity and Differences) with other algorithms- 
+Dijkstra is a special case of A* Search Algorithm, where h = 0 for all nodes.
+
+5. Implementation -
+We can use any data structure to implement open list and closed list but for best performance, we use a set data structure of C++ STL(implemented as Red-Black Tree) and a boolean hash table for a closed list.
+The implementations are similar to Dijkstra’s algorithm. If we use a Fibonacci heap to implement the open list instead of a binary heap/self-balancing tree, then the performance will become better (as Fibonacci heap takes O(1) average time to insert into open list and to decrease key)
+
+Also to reduce the time taken to calculate g, we will use dynamic programming.  
