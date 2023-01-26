@@ -1,71 +1,88 @@
-#include <graphics.h>
-#include <conio.h>
+#include<bits/stdc++.h>
+using namespace std;
 
-void drawButton(int x, int y, int width, int height, char* text) {
-    setfillstyle(SOLID_FILL, WHITE);
-    bar(x, y, width, height);
-    settextstyle(GOTHIC_FONT, HORIZ_DIR, 1);
-    outtextxy((x + width)/2 - textwidth(text)/2, (y + height)/2 - textheight(text)/2, text);
-}
+struct State
+{
+    string name
+}up[8];
 
-void showButtons() {
-    int y = 50;
-    drawButton(50, y, 150, 40, "Button 1");
-    y += 50;
-    drawButton(50, y, 150, 40, "Button 2");
-    y += 50;
-    drawButton(50, y, 150, 40, "Button 3");
-    y += 50;
-    drawButton(50, y, 150, 40, "Button 4");
-    y += 50;
-    drawButton(50, y, 150, 40, "Button 5");
-}
+void NfaToDfa(string s)
+{
+    string currentState = "a", previousState = "a";
+    up[0].name = "a";
+    up[1].name = "ab";
+    up[2].name = "abc";
+    up[3].name = "abcd";
 
-int main() {
-    int gd = DETECT, gm;
-    initgraph(&gd, &gm, "");
-
-    showButtons();
-
-    while (!kbhit()) {
-        int x = mousex();
-        int y = mousey();
-        if (ismouseclick(WM_LBUTTONDOWN)) {
-            if (x > 50 && x < 200) {
-                if (y > 50 && y < 90) {
-                    // button 1 was clicked
-                    cleardevice();
-                    outtextxy(50, 50, "Button 1 was clicked!");
-                    break;
-                }
-                else if (y > 100 && y < 140) {
-                    // button 2 was clicked
-                    cleardevice();
-                    outtextxy(50, 50, "Button 2 was clicked!");
-                    break;
-                }
-                else if (y > 150 && y < 190) {
-                    // button 3 was clicked
-                    cleardevice();
-                    outtextxy(50, 50, "Button 3 was clicked!");
-                    break;
-                }
-                else if (y > 200 && y < 240) {
-                    // button 4 was clicked
-                    cleardevice();
-                    outtextxy(50, 50, "Button 4 was clicked!");
-                    break;
-                }
-                else if (y > 250 && y < 290) {
-                    // button 5 was clicked
-                    cleardevice();
-                    outtextxy(50, 50, "Button 5 was clicked!");
-                    break;
-                }
+    int currentIndex = 0;
+    for(int i = 0; i < s.size(); i++)
+    {
+        if(s[i] == '0')
+        {
+            if(currentIndex <= 3)
+            {
+                cout << "(" << previousState << "," << s[i] << ")" << "->" << up[0].name << endl;
+            }
+            else
+            {
+                cout << "(" << up[3].name << "," << s[i] << ")" << "->" << up[0].name << endl;
             }
         }
+        else if(s[i] == '1')
+        {
+            currentIndex++;
+            if(currentIndex <= 3)
+            {
+                cout << "(" << up[currentIndex-1].name << "," << s[i] << ")" << "->" << up[currentIndex].name << endl;
+            }
+            else
+            {
+                cout << "(" << up[3].name << "," << s[i] << ")" << "->" << up[3].name << endl;
+            }
+        }
+        previousState = up[currentIndex].name;
     }
-    getch();
-    closegraph();
-    return 0;
+}
+
+int main()
+{
+    string input;
+    cin >> input;
+    int count = 0;
+    char currentChar = 'a';
+    for(int i = 0; i < input.size(); i++)
+    {
+        if(input[i] == '0' && count == 0)
+        {
+            count = 0;
+            cout << "(" << currentChar << "," << input[i] << ")" << "->" << currentChar << endl;
+            continue;
+        }
+        else if(input[i] == '1')
+        {
+            count++;
+            cout << "(" << currentChar << "," << input[i] << ")";
+            currentChar++;
+            cout << "->" << currentChar << endl;
+            if(count == 3)
+            {
+                break;
+            }
+        }
+        else if(input[i] == '0' && count != 0)
+        {
+            count = 0;
+            currentChar = 'a';
+            cout << "(" << currentChar << "," << input[i] << ")" << "->" << currentChar << endl;
+        }
+    }
+    if(count == 3)
+    {
+        cout << "The string is accepted" << endl;
+        NfaToDfa(input);
+    }
+    else
+    {
+        cout << "The string is not accepted" << endl;
+    }
 }
