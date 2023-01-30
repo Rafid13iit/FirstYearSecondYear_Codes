@@ -26,7 +26,7 @@ int main () {
   printf("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n");
 
   for (i=1; i< MAXN; i++) {
-    c = (a+b)/2;
+    c = (a * fb - b * fa) / (fb - fa);
     fc = F(c);
 
     printf("%3d  %10lf  %10lf  %10lf  %10lf  %10lf  %10lf\n", i, a, b, c, fa, fb, fc);
