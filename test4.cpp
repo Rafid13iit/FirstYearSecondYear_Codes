@@ -1,21 +1,30 @@
-#include <stdio.h>
-#include <math.h>
+#include <bits/stdc++.h>
+using namespace std;
 
-double f(double x)
-{
-    return sin(x);
-}
+#define nl '\n'
+typedef long long int ll;
+typedef  unsigned long long int llu;
 
-double forward_difference(double x, double h)
+int main ()
 {
-    return (f(x + h) - f(x)) / h;
-}
+    ll n;
+    cin >> n;
 
-int main(void)
-{
-    double x = 0.5;
-    double h = 0.1;
-    double approx = forward_difference(x, h);
-    printf("The approximation of the derivative at x=%.1f is: %.4f\n", x, approx);
+    string s[16];
+
+    s[0] = "1";
+
+    // cout << s[1] << endl;
+
+    for (ll i = 1; i <= 15; i++){
+        s[i] = s[i-1] + " " + to_string(i+1) + " " + s[i-1];
+    }
+
+    // for (ll i = 1; i <= 16; i++){
+    //     cout << s[i] << endl; 
+    // }
+
+    cout << s[n-1];
+
     return 0;
 }
