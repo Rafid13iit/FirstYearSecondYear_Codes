@@ -11,78 +11,90 @@ vi state;
 vi fs; //final states
 vector<vvi> trans; //transition table for NFA
 int checkNFA(string s);
-vi closure(int s,vector<vvi> v);
-void print(vvi st,vector<vvi> dfaTable);
+vi closure(int s, vector<vvi> v);
+void print(vvi st, vector<vvi> dfaTable);
 
 
 int main()
 {
-    state.resize(4); trans.resize(4);
+    state.resize(4);
+    trans.resize(4);
+
     cout<<"States: (4 states, 1st one is the inital state)"<<endl;
     for(int i=0;i<4;i++) cin>>state[i];
+
     cout<<"Number of final states:"<<endl;
-    int f; cin>>f;
-    for(int i=0;i<f;i++)
-    {
-        int x; cin>>x;
+    int f; 
+    cin>>f;
+    for(int i=0;i<f;i++){
+        int x;
+        cin>>x;
         fs.pb(x);
     }
+
     cout<<"NFA transition table:"<<endl;
-    for(int i=0;i<4;i++)
-    {
+    for(int i=0;i<4;i++){
         trans[i].resize(3);
+
         cout<<"Number of states for input 0 in increasing order:"<<endl;
-        int n; cin>>n;
-        for(int j=0;j<n;j++)
-        {
-            int x; cin>>x;
+        int n; 
+        cin>>n;
+        for(int j=0;j<n;j++){
+            int x; 
+            cin>>x;
             trans[i][0].pb(x);
         }
+
         cout<<"Number of states for input 1 in increasing order:"<<endl;
         cin>>n;
         for(int j=0;j<n;j++)
         {
-            int x; cin>>x;
+            int x; 
+            cin>>x;
             trans[i][1].pb(x);
         }
     }
+
     cout<<"String:"<<endl;
-    string s; cin>>s;
+    string s; 
+    cin>>s;
     if(checkNFA(s)) cout<<"Accepted"<<endl;
     else cout<<"Not Accepted "<<endl;
     
     vector<vvi> dfaTable;
     vvi st;
     st.pb(closure(0,trans));
+
     queue<vi> q;
     q.push(st[0]);
     while(!q.empty())
     {
-        vi a=q.front(); q.pop();
+        vi a=q.front(); 
+        q.pop();
+
         vvi v;
         for(int i=0;i<2;i++)
         {
             vi t;
             set<int> s;
-            for(int j=0;j<a.size();j++)
-            {
-                for(int k=0;k<trans[a[j]][i].size();k++)
-                {
+            for(int j=0;j<a.size();j++){
+
+                for(int k=0;k<trans[a[j]][i].size();k++){
                     vi c=closure(trans[a[j]][i][k],trans);
                     for(int l=0;l<c.size();l++) s.insert(c[l]);
                 }
             }
+
             for(auto x:s) t.pb(x);
             v.pb(t);
-            if(find(all(st),t)==st.end())
-            {
+            if(find(all(st),t)==st.end()){
                 st.pb(t);
                 q.push(t);
             }
         }
         dfaTable.pb(v);
     }
-    cout<<"DFA Table:"<<endl;
+    cout<< endl << "DFA Table:" << endl << endl;
     print(st,dfaTable);
 }
 
@@ -189,23 +201,24 @@ vi closure(int s,vector<vvi> v)
 
 void print(vvi st,vector<vvi> dfaTable)
 {
-    cout<<"States"<<endl;
+    cout<<"States" << "\t\t\t" << "0" << "\t\t\t" << "1" <<endl;
+    cout << "----------------------------------------------------------" << endl;
     for(int i=0;i<st.size();i++)
     {
         for(int j=0;j<st[i].size();j++)
         {
             cout<<st[i][j]<<" ";
         }
-        cout<<"\t\t";
+        cout<<"\t\t\t";
         for(int j=0;j<dfaTable[i].size();j++)
         {
-            if(j==0) cout<<"for input 0: { ";
-            else cout<<"for input 1: { ";
+            if(j==0) cout<<"{ ";
+            else cout<<"{ ";
             for(int k=0;k<dfaTable[i][j].size();k++)
             {
                 cout<<dfaTable[i][j][k]<<" ";
             }
-            cout<<"}\t\t";
+            cout<<"}\t\t\t";
         }
         cout<<endl;
     }
