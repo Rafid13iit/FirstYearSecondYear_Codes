@@ -4,7 +4,11 @@ using namespace std;
 int main()
 {
     int num_states, num_transitions;
+    
+    cout << "Enter the number of States and number of Transitions : " << endl;
     cin >> num_states >> num_transitions;
+
+    char symbol[] = {'0', '1', 'E'};
 
     char transition_matrix[num_states][num_transitions][num_states];
     map<int, string> state_names;
@@ -13,6 +17,7 @@ int main()
     int starting_index = 0;
     char state_name;
 
+    cout << "Enter the name of the States : " << endl;
     for(int i = 0; i < num_states; i++){
            cin >> state_name;
            
@@ -24,8 +29,18 @@ int main()
 
     for(int i = 0; i < num_states; i++)
     {
+        cout << "Input transitions for state " << state_names[i] << endl;
+
+        cout << "   |";
+        for (int i = 0; i < num_states; i++){
+            cout << state_names[i] << "|";
+        }
+        cout << endl;
+
         for(int j = 0; j < num_transitions; j++)
         {
+            cout << symbol[j] << " : " ;
+
             for(int k = 0; k < num_states; k++)
             {
                 cin >> transition_matrix[i][j][k];
@@ -78,7 +93,7 @@ int main()
         }
     }
 
-    cout << " Epsilons" << endl;
+    cout << " E-closures:" << endl;
 
     for(int i = 0; i < num_states; i++)
     {
