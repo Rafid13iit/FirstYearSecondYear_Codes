@@ -44,7 +44,7 @@ int LCS(int i, int j, int Remember[][MAX])
 
 int main ()
 {
-    freopen("text_LCS.txt", "r", stdin);
+    //freopen("text_LCS.txt", "r", stdin);
     
     int i = 0, j = 0;
 

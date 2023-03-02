@@ -1,4 +1,5 @@
 //using Botttom Up approach
+//using loop method
 
 #include <bits/stdc++.h>
 #define MAX 100
