@@ -1,86 +1,63 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-bool is_acceptable(string s) {
-    stack<char> st;
-    st.push('S');
-    
-    for (int i = 0; i < s.length(); i++) {
+const int MAX = 1000;
+const int INF = 1e9;
 
-        if (st.empty()) {
-            return false;
-        }
-        
-        char top = st.top();
-        st.pop();
-        
-        if (top == 'S') {
+int adj[MAX][MAX];
+int n, m; // number of nodes and edges
 
-            st.push('B');
-            st.push('1');
-            st.push('A');
+struct Edge {
+    int u, v, w;
+};
 
-            i--;
-        }
+int mstPrim(int src) {
+    bool visited[MAX] = {false};
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    int sum = 0;
 
-        else if (top == 'A') {
-    
-            if (s[i] == '0') {
-                st.push('A');
-            }
-
-            else if (s[i] == '1'){
-                st.pop();
-                continue;
-            }
-
-            else{
-                return false;
-            }
-        }
-
-        else if (top == 'B') {
-
-            if (s[i] == '0') {
-                st.push('B');
-            }
-  
-            else if (s[i] == '1') {
-                st.push('B');
-            }
-
-            else {
-                return false;
-            }
-        }
-
-        else {
-            return false;
+    visited[src] = true;
+    for (int i = 0; i < n; i++) {
+        if (adj[src][i] != INF) {
+            pq.push(make_pair(adj[src][i], i));
         }
     }
-    
-    if(st.top() == 'B'){
-        return true;
+
+    while (!pq.empty()) {
+        pair<int, int> t = pq.top();
+        pq.pop();
+
+        int u = t.second;
+        int w = t.first;
+
+        if (visited[u]) {
+            continue;
+        }
+
+        visited[u] = true;
+        sum += w;
+
+        for (int i = 0; i < n; i++) {
+            if (adj[u][i] != INF && !visited[i]) {
+                pq.push(make_pair(adj[u][i], i));
+            }
+        }
     }
 
-    else{
-        return false;
-    }
+    return sum;
 }
 
 int main() {
-    string s;
-    cin >> s;
-    
-    bool result = is_acceptable(s);
-    
-    if (result) {
-        cout << "String " << s << " is ACCEPTED by the CFG." << endl;
+    memset(adj, INF, sizeof(adj));
+
+    cin >> n >> m;
+    for (int i = 0; i < m; i++) {
+        Edge e;
+        cin >> e.u >> e.v >> e.w;
+        adj[e.u][e.v] = adj[e.v][e.u] = e.w;
     }
 
-    else {
-        cout << "String " << s << " is NOT Accepted by the CFG." << endl;
-    }
-    
+    cout << mstPrim(0) << endl;
+
     return 0;
 }

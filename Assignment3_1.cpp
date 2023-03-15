@@ -44,12 +44,12 @@ int main() {
     while (1) {
         cin >> C >> S >> Q;
 
-        if (C == 0 && S == 0 && Q==0) break;
+        if (C == 0 && S == 0 && Q==0) break; // terminates when 0 0 0
 
         if (T > 1) {
-            cout << "\n";
+            cout << endl;
         }
-        cout << "Case #" << T++ << "\n";
+        cout << "Case #" << T++ << endl;
 
         memset(adj, -1, sizeof(adj)); // initialize adjacency matrix to -1
 
@@ -61,15 +61,15 @@ int main() {
             adj[c2][c1] = d;
         }
 
-        // process queries
+        // input the queries
         for (int i = 0; i < Q; i++) {
             int c1, c2;
             cin >> c1 >> c2;
             int dist = dijkstra(c1, c2, C);
             if (dist == -1) {
-                cout << "no path\n";
+                cout << "no path" << endl;
             } else {
-                cout << dist << "\n";
+                cout << dist << endl;
             }
         }
     }
