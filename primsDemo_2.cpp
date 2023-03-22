@@ -1,17 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-typedef long long int ll;
-typedef unsigned long long int llu;
+#define v 6
 
-ll nodes, edges;
-
-ll selectMinVertex (vector<int>& value, vector<bool>& setMST)
+int selectMinVertex (vector<int>& value, vector<bool>& setMST)
 {
 	int minimum = INT_MAX;
 	int vertex;
 	
-	for (int i = 0; i < nodes; i++)
+	for (int i = 0; i < v; i++)
 	{
 		if (setMST[i] == false && value[i] < minimum)
 		{
@@ -23,26 +20,26 @@ ll selectMinVertex (vector<int>& value, vector<bool>& setMST)
 	return vertex;
 }
 
-void findMST (int graph[nodes][nodes])
+void findMST (int graph[v][v])
 {
-	int parent[nodes];
-	vector<int> value (nodes, INT_MAX); //used edged relaxation
-	vector<bool> setMST (nodes, false); //TRUE -> vertex is included in MST
+	int parent[v];
+	vector<int> value (v, INT_MAX); //used edged relaxation
+	vector<bool> setMST (v, false); //TRUE -> vertex is included in MST
 	
 	//Assuming start point as Node -> 0
 	parent[0] = -1; // start node has no parent
 	value[0] = 0; // start node has value = 0 to get picked 1st
 	
 	//from MST with (v-1) edges
-	for (int i = 0; i < nodes-1; i++)
+	for (int i = 0; i < v-1; i++)
 	{
 		//select best vertex applying greedy method
 		int u = selectMinVertex (value, setMST);
-
+        
 		setMST[u] = true; //include new vertex in MST
 		
 		//relax adjacent vertices (noy yet included in MST)
-		for (int j = 0; j < nodes; j++)
+		for (int j = 0; j < v; j++)
 		{
 			/* 3 constraints to relax :-
 					1. edge is present from u to j
@@ -59,7 +56,7 @@ void findMST (int graph[nodes][nodes])
 	}
 	
 	//print MST
-	for (int i = 1; i < nodes; i++)
+	for (int i = 1; i < v; i++)
 	{
 		cout << "u -> v : " << parent[i] << "->" << i << ", weight = " << graph[parent[i]][i] << endl;
 	}
@@ -68,18 +65,12 @@ void findMST (int graph[nodes][nodes])
 
 int main ()
 {
-    ll nodes, edges;
-    cout << "Enter the number of nodes: ";
-    cin >> nodes;
-    cout << "Enter the number of edges: ";
-    cin >> edges;
-
-    ll graph[nodes][nodes]; // Adjacency matrix to store the graph
-    for (ll i = 0; i < nodes; i++) {
-        for (ll j = 0; j < nodes; j++) {
-            graph[i][j] = 0;
-        }
-    }
+	int graph[v][v] = { {0, 4, 6, 0, 0, 0},
+						{4, 0, 6, 3, 4, 0},
+						{6, 6, 0, 1, 8, 0},
+						{0, 3, 1, 0, 2, 3},
+						{0, 4, 8, 2, 0, 7},
+						{0, 0, 0, 3, 7, 0} };
 						
 	findMST(graph);
 	
