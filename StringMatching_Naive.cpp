@@ -3,8 +3,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void search(char* pat, char* txt)
+int search(char* pat, char* txt)
 {
+    int sum = 0;
 	int M = strlen(pat);
 	int N = strlen(txt);
 
@@ -17,10 +18,14 @@ void search(char* pat, char* txt)
 			if (txt[i + j] != pat[j])
 				break;
 
-		if (j
-			== M) // if pat[0...M-1] = txt[i, i+1, ...i+M-1]
+		if (j== M) // if pat[0...M-1] = txt[i, i+1, ...i+M-1]
+        {
+            sum++;
 			cout << "Pattern found at index " << i << endl;
+        }
 	}
+
+    return sum;
 }
 
 // Driver's Code
@@ -30,6 +35,9 @@ int main()
 	char pat[] = "AABA";
 
 	// Function call
-	search(pat, txt);
+	int result = search(pat, txt);
+
+    cout << "Total : " << result << endl;
+
 	return 0;
 }
