@@ -9,13 +9,14 @@ int main ()
     //fixed DFA
     int nStates = 8, nStartStates = 1, nFinishingStates = 1, nSymbols = 2;
     int symbol_1 = 0, symbol_2 = 1;
+
     int startingState = 0;
     int finishingState = 4;
 
-    int table[nStates][nStates];
+    int table[nStates][nStates]; //table to implement Table Filling Algorithm
 
-    pair <int, pair <int, int>> p[nStates]; // for DFA state transition table, first is for the states,
-                                            // and the second is for where is going using 0 and 1 symbols
+    pair <int, pair <int, int> > p[nStates]; // DFA state transition table, first is for the states,
+                                            // and the second is for where it is going from that state using 0 and 1 symbols
 
     //Fixed DFA table
     for (int i = 0; i < nStates; i++)
@@ -43,6 +44,7 @@ int main ()
             if ((i != finishingState && j == finishingState) || (i == finishingState && j != finishingState))
             {
                 table[i][j] = 1; // marked the pair
+                table[j][i] = 1;
             }
         }
     }
@@ -57,15 +59,35 @@ int main ()
             {
                 if (table[i][j] == -1)
                 {
-                    if (table[(p[i].second).first][(p[j].second).first] == 1) table[i][j] = 1;
+                    if (table[(p[i].second).first][(p[j].second).first] == 1) 
+                    {
+                        table[i][j] = 1;
+                        table[j][i] = 1;
+                    }
                         
-                    else if (table[(p[i].second).second][(p[j].second).second] == 1) table[i][j] = 1;
+                    else if (table[(p[i].second).second][(p[j].second).second] == 1)
+                    {
+                        table[i][j] = 1;
+                        table[j][i] = 1;
+                    }
 
                     else continue;
                 }
             }
         }
 
+    }
+
+
+    cout << endl << "The table is : " << endl;
+    for (int i = 1; i < nStates; i++)
+    {
+        for (int j = 0; j < i; j++)
+        {
+            if (table[i][j] == -1) cout << table[i][j] << "  ";
+            else cout << " " << table[i][j] << "  ";
+        }
+        cout << endl;
     }
 
 
