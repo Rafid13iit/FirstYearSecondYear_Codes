@@ -80,10 +80,18 @@ int main ()
 
     }
 
+    // printing the Table 
+    cout << endl << "The table is : " << endl << "    ";
+    for (int i = 0; i < nStates; i++)
+    {
+        cout << i << "  ";
+    }
 
-    cout << endl << "The table is : " << endl;
+    cout << endl << "0" << endl;
     for (int i = 1; i < nStates; i++)
     {
+        cout << i << "   ";
+
         for (int j = 0; j < i; j++)
         {
             if (table[i][j] == '=') cout << table[i][j] << "  ";
@@ -92,7 +100,7 @@ int main ()
         cout << endl;
     }
 
-
+    //printing the Equivalent states
     cout << endl << "Equivalent states are : " << endl;
     for (int i = 1; i < nStates; i++)
     {
