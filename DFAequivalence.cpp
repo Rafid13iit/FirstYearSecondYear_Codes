@@ -13,12 +13,13 @@ int main ()
     int startingState = 0;
     int finishingState = 4;
 
-    int table[nStates][nStates]; //table to implement Table Filling Algorithm
+    char table[nStates][nStates]; //table to implement Table Filling Algorithm
 
     pair <int, pair <int, int> > p[nStates]; // DFA state transition table, first is for the states,
                                             // and the second is for where it is going from that state using 0 and 1 symbols
 
     //Fixed DFA table
+    cout << "Enter the DFA transition table : " << endl;
     for (int i = 0; i < nStates; i++)
     {
         cin >> p[i].first;
@@ -30,7 +31,7 @@ int main ()
     {
         for (int j = 0; j < nStates; j++)
         {
-            table[i][j] = -1; // unmarked
+            table[i][j] = '='; // unmarked as it can be equivalent
         }
     }
 
@@ -43,32 +44,33 @@ int main ()
         {
             if ((i != finishingState && j == finishingState) || (i == finishingState && j != finishingState))
             {
-                table[i][j] = 1; // marked the pair
-                table[j][i] = 1;
+                table[i][j] = 'X'; // marked the pair as not equivalent
+                table[j][i] = 'X';
             }
         }
     }
 
-    //Step - 2
+    
     for (int thisProcess = 1; thisProcess <= 100; thisProcess++)
     {
-
+        //Step - 2
+        
         for (int i = 1; i < nStates; i++)
         {
             for (int j = 0; j < i; j++)
             {
-                if (table[i][j] == -1)
+                if (table[i][j] == '=')
                 {
-                    if (table[(p[i].second).first][(p[j].second).first] == 1) 
+                    if (table[(p[i].second).first][(p[j].second).first] == 'X') 
                     {
-                        table[i][j] = 1;
-                        table[j][i] = 1;
+                        table[i][j] = 'X';
+                        table[j][i] = 'X';
                     }
                         
-                    else if (table[(p[i].second).second][(p[j].second).second] == 1)
+                    else if (table[(p[i].second).second][(p[j].second).second] == 'X')
                     {
-                        table[i][j] = 1;
-                        table[j][i] = 1;
+                        table[i][j] = 'X';
+                        table[j][i] = 'X';
                     }
 
                     else continue;
@@ -84,8 +86,8 @@ int main ()
     {
         for (int j = 0; j < i; j++)
         {
-            if (table[i][j] == -1) cout << table[i][j] << "  ";
-            else cout << " " << table[i][j] << "  ";
+            if (table[i][j] == '=') cout << table[i][j] << "  ";
+            else cout << table[i][j] << "  ";
         }
         cout << endl;
     }
@@ -96,7 +98,7 @@ int main ()
     {
         for (int j = 0; j < i; j++)
         {
-            if (table[i][j] == -1)
+            if (table[i][j] == '=')
             {
                 cout << i << " = " << j << endl;
             }
