@@ -1,2 +1,1 @@
-abcabbabaababc
-ab
+map <int, char>
