@@ -3,6 +3,7 @@ using namespace std;
 
 #define MAX 100
 
+//structure can be used here
 int vertex, edge;
 int graph_G[MAX][MAX];
 int cost[MAX][MAX];
