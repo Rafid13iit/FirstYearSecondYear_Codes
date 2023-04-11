@@ -14,7 +14,7 @@ void printSolution(int src, int dst, int distance[][MAX])
     }
     else{
         cout << "Source Vertex\tDestination Vertex\tDistance from Source" << endl;
-        cout << "    " << src << " \t\t\t" << dst << " \t\t\t" << distance[src][dst] << endl;
+        cout << "     " << src << " \t\t\t" << dst << " \t\t\t" << distance[src][dst] << endl;
     }
 }
 
@@ -37,12 +37,14 @@ void floydWarshall(int src, int dst)
         }  
     }
 
-    // Compute the shortest distances
+    // Compute the shortest distances for pairs
     for (int k = 0; k < vertex; k++){
         for (int i = 0; i < vertex; i++){
             for (int j = 0; j < vertex; j++){
                 if (distance[i][k] != INT_MAX && distance[k][j] != INT_MAX){
+
                     distance[i][j] = min(distance[i][j], distance[i][k] + distance[k][j]);
+
                 }
             }
         }
