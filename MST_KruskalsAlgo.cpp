@@ -69,6 +69,8 @@ ll kruskal (ll nodes, ll edges)
         {
             makeUnion(u, v);
 
+            cout << "u -> v : " << u << "->" << v << ", weight = " << w << endl;
+
             answer += w;
         }
         //else nothing to do, just skip the edge pair
