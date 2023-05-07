@@ -1,1 +1,1 @@
-map <int, char>
+%lf
