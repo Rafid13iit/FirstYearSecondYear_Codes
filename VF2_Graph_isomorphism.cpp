@@ -1,98 +1,102 @@
 #include <bits/stdc++.h>
-#include <unordered_map>
-
 using namespace std;
 
-#define N 100
+#define MAX 100
 
-vector<int> g1[N], g2[N]; //adjacency lists to represent the two graphs.
-int degree1[N], degree2[N]; //arrays to store the degrees of the vertices in the two graphs.
-unordered_map<int, int> labels1, labels2; //unordered maps to store the labels of the vertices in the two graphs.
-bool used1[N], used2[N]; //are arrays to keep track of whether a vertex has been used in the mapping or not.
-int n, m; // number of vertices in each graph, number of edges in each graph
-
-//is a helper function to check if two vertices from the two graphs are isomorphic.
-bool check(int u1, int u2) {
-    if (degree1[u1] != degree2[u2]) return false;
-    if (labels1[u1] != labels2[u2]) return false;
-    return true;
-}
-
-bool dfs(int u1, int u2) {
-    used1[u1] = true;
-    used2[u2] = true;
-    if (!check(u1, u2)) return false;
-
-    for (int i = 0; i < g1[u1].size(); i++) {
-        int v1 = g1[u1][i];
-        bool found = false;
-
-        for (int j = 0; j < g2[u2].size(); j++) {
-            int v2 = g2[u2][j];
-            if (!used2[v2] && dfs(v1, v2)) {
-                found = true;
-                break;
-            }
-        }
-        if (!found) return false;
-    }
-    return true;
-}
+int g1[MAX][MAX];
+int g2[MAX][MAX];
 
 bool isIsomorphic() {
-    for (int i = 0; i < n; i++) {
-        if (degree1[i] != degree2[i]) return false;
-        labels1[i] = g1[i].size();
-        labels2[i] = g2[i].size();
+    int n1, m1;
+    cin >> n1 >> m1;
+
+    for (int i = 0; i < m1; i++) {
+        int u, v;
+        cin >> u >> v;
+        g1[u][v] = g1[v][u] = 1;
     }
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (degree1[i] == degree2[j] && !used1[i] && !used2[j]) {
-                if (dfs(i, j)) return true;
+
+    int n2, m2;
+    cin >> n2 >> m2;
+
+    for (int i = 0; i < m2; i++) {
+        int u, v;
+        cin >> u >> v;
+        g2[u][v] = g2[v][u] = 1;
+    }
+
+    if (n1 != n2)
+        return false;
+
+    unordered_map<int, int> degreeCount1, degreeCount2;
+
+    for (int i = 0; i < n1; i++) {
+        for (int j = 0; j < n1; j++) {
+            degreeCount1[i] += g1[i][j];
+            degreeCount2[i] += g2[i][j];
+        }
+    }
+
+    if (degreeCount1 != degreeCount2)
+        return false;
+
+    unordered_map<int, unordered_map<int, int>> labelCount1, labelCount2;
+
+    for (int i = 0; i < n1; i++) {
+        for (int j = 0; j < n1; j++) {
+            if (g1[i][j]) {
+                labelCount1[i][degreeCount1[j]]++;
+            }
+            if (g2[i][j]) {
+                labelCount2[i][degreeCount2[j]]++;
             }
         }
     }
-    return false;
+
+    return labelCount1 == labelCount2;
 }
 
 int main() {
-    cin >> n >> m;
-    for (int i = 0; i < m; i++) {
-        int u, v;
-        cin >> u >> v;
-        g1[u].push_back(v);
-        degree1[u]++;
-    }
-    cin >> n >> m;
-    for (int i = 0; i < m; i++) {
-        int u, v;
-        cin >> u >> v;
-        g2[u].push_back(v);
-        degree2[u]++;
-    }
-    if (isIsomorphic()) cout << "The two graphs are isomorphic." << endl;
-    else cout << "The two graphs are not isomorphic." << endl;
+    if (isIsomorphic())
+        cout << "The two graphs are Isomorphic." << endl;
+    else
+        cout << "The two graphs are Not isomorphic." << endl;
+
     return 0;
 }
 
+
+
 //Example 1
 /*
-6
-6
+8
+12
+0 1
+0 3
+0 4
 1 2
-1 4
+1 5 
 2 3
-3 6
-4 5 
-5 6
-6
-6
-1 5
-1 4
-2 4
 2 6
-3 5
-3 6
+3 7
+4 5
+4 7
+5 6
+6 7
+8
+12
+0 1
+0 3
+0 5
+2 1
+2 3
+2 7
+4 1
+4 5
+4 7
+6 3
+6 5
+6 7
 
 Isomorphic
 */
@@ -101,20 +105,42 @@ Isomorphic
 /*
 6
 6
+0 1
+0 3
 1 2
-1 4
-2 3
-3 6
+2 5
+3 4 
 4 5
-5 6
 6
 6
+0 4
+0 3
 1 3
 1 5
 2 4
-2 6
+2 5
+
+Isomorphic
+*/
+
+//Example 3
+/*
+6
+6
+0 1
+0 2
+1 2
+2 5
+3 4
+4 5
+6
+6
+0 2
+0 4
+1 3
+1 5
+2 4
 3 5
-4 6
 
 NOT isomorphic
 */

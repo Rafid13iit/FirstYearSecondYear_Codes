@@ -1,78 +1,118 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <stack>
+#include <vector>
 using namespace std;
 
-typedef pair<int, int> pii;
-const int INF = 1e9;
+const int MAX_SIZE = 100;
 
-vector<pii> adj[105]; // adjacency list to represent graph
+void tarjanDFS(int u, int graph[MAX_SIZE][MAX_SIZE], int discoveryTime[], int lowLink[], bool onStack[], stack<int>& nodeStack, vector<vector<int>>& SCCs, int& time) {
+    discoveryTime[u] = lowLink[u] = ++time;
+    nodeStack.push(u);
+    onStack[u] = true;
 
-int dijkstra(int src, int dest) {
-    priority_queue<pii, vector<pii>, greater<pii>> pq;
-    vector<int> dist(105, INF);
-    pq.push({0, src});
-    dist[src] = 0;
-
-    while (!pq.empty()) {
-        int u = pq.top().second;
-        pq.pop();
-
-        if (u == dest) {
-            return dist[dest];
-        }
-
-        for (auto v : adj[u]) {
-            int new_dist = max(dist[u], v.second); // use maximum of current distance and edge weight
-            if (new_dist < dist[v.first]) {
-                dist[v.first] = new_dist;
-                pq.push({new_dist, v.first});
+    for (int v = 0; v < MAX_SIZE; v++) {
+        if (graph[u][v] != 0) {
+            if (discoveryTime[v] == -1) {
+                tarjanDFS(v, graph, discoveryTime, lowLink, onStack, nodeStack, SCCs, time);
+                lowLink[u] = min(lowLink[u], lowLink[v]);
+            } else if (onStack[v]) {
+                lowLink[u] = min(lowLink[u], discoveryTime[v]);
             }
         }
     }
 
-    return -1; // no path found
+    if (discoveryTime[u] == lowLink[u]) {
+        vector<int> scc;
+        while (true) {
+            int v = nodeStack.top();
+            nodeStack.pop();
+            onStack[v] = false;
+            scc.push_back(v);
+
+            if (v == u) {
+                break;
+            }
+        }
+
+        SCCs.push_back(scc);
+    }
+}
+
+vector<vector<int>> tarjanSCC(int graph[MAX_SIZE][MAX_SIZE]) {
+    int discoveryTime[MAX_SIZE];
+    int lowLink[MAX_SIZE];
+    bool onStack[MAX_SIZE];
+    stack<int> nodeStack;
+    vector<vector<int>> SCCs;
+    int time = 0;
+
+    for (int i = 0; i < MAX_SIZE; i++) {
+        discoveryTime[i] = -1;
+        lowLink[i] = -1;
+        onStack[i] = false;
+    }
+
+    for (int i = 0; i < MAX_SIZE; i++) {
+        if (discoveryTime[i] == -1) {
+            tarjanDFS(i, graph, discoveryTime, lowLink, onStack, nodeStack, SCCs, time);
+        }
+    }
+
+    return SCCs;
 }
 
 int main() {
+    int n, m;
+    cout << "Enter the number of vertices: ";
+    cin >> n;
+    cout << "Enter the number of edges: ";
+    cin >> m;
 
-    freopen ("dijk.txt", "r", stdin);
-    
-    int T = 1; // test case number
-    int C = 1, S = 1, Q = 1;
-    
-    while (1) {
-        cin >> C >> S >> Q;
+    int graph[MAX_SIZE][MAX_SIZE] = {0};
 
-        if (C == 0 && S == 0 && Q==0) break;
+    cout << "Enter the edges:" << endl;
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        cin >> u >> v;
+        graph[u][v] = 1;
+    }
 
-        if (T > 1) {
-            cout << "\n";
+    vector<vector<int>> SCCs = tarjanSCC(graph);
+
+    cout << "Strongly Connected Components:" << endl;
+    for (const auto& scc : SCCs) {
+        for (int vertex : scc) {
+            cout << vertex << " ";
         }
-        cout << "Case #" << T++ << "\n";
-
-        for (int i = 1; i <= C; i++) {
-            adj[i].clear();
-        }
-
-        // read edges and build adjacency list
-        for (int i = 0; i < S; i++) {
-            int c1, c2, d;
-            cin >> c1 >> c2 >> d;
-            adj[c1].push_back({c2, d});
-            adj[c2].push_back({c1, d});
-        }
-
-        // process queries
-        for (int i = 0; i < Q; i++) {
-            int c1, c2;
-            cin >> c1 >> c2;
-            int dist = dijkstra(c1, c2);
-            if (dist == -1) {
-                cout << "no path\n";
-            } else {
-                cout << dist << "\n";
-            }
-        }
+        cout << endl;
     }
 
     return 0;
 }
+/*
+Example - 01:
+
+8
+14
+0 1
+7 0
+1 7
+1 6
+7 6
+1 2
+6 5 
+5 6
+2 5
+2 3
+3 2
+3 4
+5 4
+4 4
+
+Output:
+4 
+5 6 
+3 2 
+7 1 0
+
+*/

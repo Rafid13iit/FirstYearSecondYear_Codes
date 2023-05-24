@@ -1,7 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <map>
-
+#include <bits/stdc++.h>
 using namespace std;
 
 // A structure to represent an edge in the graph

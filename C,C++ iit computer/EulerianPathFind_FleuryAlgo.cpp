@@ -134,3 +134,28 @@ int main() {
 
     return 0;
 }
+
+/*
+6
+8
+0 1
+0 2
+1 2
+1 3
+1 4
+3 4
+3 5
+4 5
+
+output:
+
+Euler Path:
+Edge: 3 -> 1
+Edge: 1 -> 0
+Edge: 0 -> 2
+Edge: 2 -> 1
+Edge: 1 -> 4
+Edge: 4 -> 3
+Edge: 3 -> 5
+Edge: 5 -> 4
+*/

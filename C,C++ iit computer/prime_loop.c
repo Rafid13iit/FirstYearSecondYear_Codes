@@ -11,7 +11,7 @@ int main ()
     }
 
     if (count==2) printf("The number is a Prime Number.\n");
-    else printf("The number is not a Prime Number.\n");a
+    else printf("The number is not a Prime Number.\n");
 
     return 0;
 }
