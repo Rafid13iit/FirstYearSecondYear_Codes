@@ -10,7 +10,7 @@ int main ()
     ll n, count = 0;
 
     cin >> n;
-    ll a[n];
+    ll a[n+1], tmp[n];
 
     a[0] = -10000;
 
@@ -18,8 +18,10 @@ int main ()
         cin >> a[i];
 
         if (a[i] < a[i-1]) {
-            count += a[i - 1] - a[i];
-            a[i] = a[i - 1];
+            tmp[i-1] = a[i] - a[i-1];
+        }
+        else{
+            tmp[i-1] = 0;
         }
     }
 
